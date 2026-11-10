@@ -25,6 +25,25 @@
     .fade-in{animation:rise .42s ease both}
     @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
     @media(prefers-reduced-motion:reduce){.fade-in{animation:none}.primary,.answer{transition:none}}
+    .term{background:#1c1c1c;border:1px solid #3a3a3a;border-top:3px solid #d70a53;border-radius:10px;overflow:hidden;box-shadow:0 10px 30px #0006}
+.term:focus-within{box-shadow:0 0 0 2px #b9f57b66,0 10px 30px #0006}
+.term-bar{display:flex;align-items:center;gap:7px;background:#2b2b2b;padding:8px 12px}
+.term-bar .dot{width:11px;height:11px;border-radius:50%}
+.term-bar .dot.r{background:#ff5f56}
+.term-bar .dot.y{background:#ffbd2e}
+.term-bar .dot.g{background:#27c93f}
+.term-title{margin-left:8px;font:12px 'Space Mono',monospace;color:#bdbdbd}
+.term-body{padding:14px 16px 16px;cursor:text;font-family:'Space Mono',monospace;font-size:.95rem;color:#eee}
+.term-line{display:flex;align-items:center}
+.prompt{white-space:pre;flex:none}
+.prompt .user{color:#8ae234;font-weight:700}
+.prompt .uroot{color:#ff6b6b;font-weight:700}
+.prompt .path{color:#729fcf;font-weight:700}
+.term input{flex:1;min-width:0;background:transparent;border:0;box-shadow:none;color:#eee;caret-color:#b9f57b;font:inherit;padding:0;outline:none}
+.term input:focus,.term input:focus-visible{box-shadow:none;outline:none}
+.term-out{margin-top:8px;min-height:1.3em;white-space:pre-wrap}
+.term-out.ok{color:#8ae234}
+.term-out.bad{color:#ff9d8c}
   </style>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
 </head>
@@ -85,15 +104,27 @@
           <div id="options" class="grid gap-3"></div>
         </div>
         <div id="layer-two" class="hidden">
-          <p class="mono text-sm text-[#b9f57b] mb-3">02 / COBA KETIK</p>
-          <h3 class="text-xl font-bold mb-2">Gimana cara pakainya?</h3>
-          <p id="mission-text" class="text-[#c4d1c0] mb-5 leading-relaxed"></p>
-          <form id="command-form">
-            <label for="command-answer" class="block mb-2 font-semibold">Ketik perintah untuk misi berikut:</label>
-            <input id="command-answer" class="mono w-full rounded-lg px-4 py-3 mb-4" placeholder="Ketik perintah di sini..." autocomplete="off" autocapitalize="off" spellcheck="false" required>
-            <button id="check-button" type="submit" class="primary rounded-lg px-5 py-3 font-bold">Periksa jawaban</button>
-          </form>
+  <p class="mono text-sm text-[#b9f57b] mb-3">02 / COBA KETIK</p>
+  <h3 class="text-xl font-bold mb-2">Gimana cara pakainya?</h3>
+  <p id="mission-text" class="text-[#c4d1c0] mb-5 leading-relaxed"></p>
+  <form id="command-form">
+    <label for="command-answer" class="sr-only">Ketik perintah untuk misi di atas</label>
+    <div class="term">
+      <div class="term-bar">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span id="term-title" class="term-title">siswa@debian: ~</span>
+      </div>
+      <div class="term-body" id="term-body">
+        <div class="term-line">
+          <span id="term-prompt" class="prompt"></span>
+          <input id="command-answer" placeholder="ketik perintah..." autocomplete="off" autocapitalize="off" spellcheck="false" required>
         </div>
+        <div id="term-output" class="term-out" aria-hidden="true"></div>
+      </div>
+    </div>
+    <button id="check-button" type="submit" class="primary rounded-lg px-5 py-3 font-bold mt-4">Periksa jawaban (Enter)</button>
+  </form>
+</div>
         <div id="feedback" role="status" aria-live="polite" class="hidden mt-6 border-t border-[#435747] pt-5">
           <p id="feedback-title" class="font-bold mb-2"></p>
           <p id="feedback-detail" class="text-[#c3d0c1] leading-relaxed mb-5"></p>
