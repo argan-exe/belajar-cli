@@ -193,7 +193,16 @@
   function updateScore() {
     $('live-score').textContent = 'Fungsi ' + layer1 + ' · Praktik ' + layer2;
   }
-
+  function setPrompt(q) {
+  const root = /sebagai root/i.test(q.mission);
+  $('term-prompt').innerHTML = root
+    ? '<span class="uroot">root@debian</span>:<span class="path">~</span># '
+    : '<span class="user">siswa@debian</span>:<span class="path">~</span>$ ';
+  $('term-title').textContent = (root ? 'root' : 'siswa') + '@debian: ~';
+  $('term-output').textContent = '';
+  $('term-output').className = 'term-out';
+}
+$('term-body').addEventListener('click', () => $('command-answer').focus());
   function showQuestion() {
     const q = questions[index];
     $('level-label').textContent = 'LEVEL ' + q.level + ' / ' + TOTAL_LEVELS;
@@ -249,6 +258,8 @@
     const correct = q.accepted.some(answer => normalize(answer) === typed) || (q.regex || []).some(re => re.test(typed));
     if (correct) layer2++;
     Object.assign(details[index], {jawaban_praktik:raw,benar_praktik:correct});
+    $('term-output').className = 'term-out ' + (correct ? 'ok' : 'bad');
+$('term-output').textContent = correct ? '✓ sintaks sesuai' : '✗ sintaks belum tepat';
     $('command-answer').disabled = true;
     $('check-button').disabled = true;
     $('feedback-title').textContent = correct ? 'Sintaks benar!' : 'Sintaks belum tepat.';
@@ -264,6 +275,7 @@
       $('layer-two').classList.remove('hidden');
       $('feedback').classList.add('hidden');
       $('mission-text').textContent = questions[index].mission;
+      setPrompt(questions[index]);
       $('command-answer').disabled = false;
       $('check-button').disabled = false;
       $('command-answer').focus();
